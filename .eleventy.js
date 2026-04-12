@@ -50,6 +50,22 @@ export default function (eleventyConfig) {
       .sort((a, b) => new Date(b.data.date) - new Date(a.data.date));
   });
 
+  eleventyConfig.addCollection("deferrals", (collectionApi) => {
+    // Sort: pending/blocked/in-progress first (by priority), done last
+    const statusRank = { "in-progress": 0, "pending": 1, "blocked": 2, "done": 3 };
+    const priorityRank = { "P0": 0, "P1": 1, "P2": 2, "P3": 3 };
+    return collectionApi
+      .getFilteredByGlob("content/deferrals/**/*.md")
+      .sort((a, b) => {
+        const sa = statusRank[a.data.status] ?? 9;
+        const sb = statusRank[b.data.status] ?? 9;
+        if (sa !== sb) return sa - sb;
+        const pa = priorityRank[a.data.priority] ?? 9;
+        const pb = priorityRank[b.data.priority] ?? 9;
+        return pa - pb;
+      });
+  });
+
   // --- Date filter for templates ---
   eleventyConfig.addFilter("isoDate", (d) => {
     if (!d) return "";

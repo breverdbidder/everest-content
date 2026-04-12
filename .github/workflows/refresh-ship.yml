@@ -1,0 +1,24 @@
+name: Refresh Ship Dashboard
+
+# Auto-refreshes content.zonewise.ai/ship/ every 30 minutes
+# so SUMMIT runs, recent commits, and open issues stay current
+# without requiring a content push.
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"   # every 30 minutes
+  workflow_dispatch:          # manual trigger
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  trigger-rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger build workflow
+        run: |
+          gh workflow run build.yml --repo breverdbidder/everest-content
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

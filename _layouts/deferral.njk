@@ -1,0 +1,32 @@
+---
+# _layouts/deferral.njk — wraps individual deferral markdown files
+# Inherits visual style from dono-v5 but adds a status strip at top
+layout: dono-v5
+---
+
+<div style="padding: 16px 20px; background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid 
+  {%- if status == 'done' %} var(--green)
+  {%- elif status == 'blocked' %} var(--yellow)
+  {%- elif status == 'in-progress' %} var(--orange)
+  {%- else %} var(--text-faint)
+  {%- endif %}; border-radius: 6px; margin-bottom: 32px;">
+  <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-faint);">
+    <span style="padding: 3px 8px; border-radius: 3px; background: rgba(245,158,11,0.15); color: var(--orange); border: 1px solid rgba(245,158,11,0.4);">{{ priority }}</span>
+    <span style="padding: 3px 8px; border-radius: 3px; 
+      {%- if status == 'done' %} background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.4);
+      {%- elif status == 'blocked' %} background: rgba(234,179,8,0.15); color: var(--yellow); border: 1px solid rgba(234,179,8,0.4);
+      {%- elif status == 'in-progress' %} background: rgba(245,158,11,0.15); color: var(--orange); border: 1px solid rgba(245,158,11,0.4);
+      {%- else %} background: var(--bg-raised); color: var(--text-dim); border: 1px solid var(--border);
+      {%- endif %}">{{ status }}</span>
+    {% if owner %}<span>owner: {{ owner }}</span>{% endif %}
+    {% if estimated_minutes %}<span>~{{ estimated_minutes }}min</span>{% endif %}
+    {% if dependency %}<span>blocks on {{ dependency }}</span>{% endif %}
+  </div>
+  {% if blocker %}
+  <div style="margin-top: 10px; font-size: 13px; color: var(--text-dim);">
+    <strong style="color: var(--yellow);">Blocker:</strong> {{ blocker }}
+  </div>
+  {% endif %}
+</div>
+
+{{ content | safe }}
