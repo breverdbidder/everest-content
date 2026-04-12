@@ -1,0 +1,4 @@
+{
+  "permalink": "/deferrals/{{ page.fileSlug }}/",
+  "eleventyExcludeFromCollections": false
+}
