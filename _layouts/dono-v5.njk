@@ -1,0 +1,183 @@
+---
+# _layouts/dono-v5.njk — the canonical Everest content wrapper
+# Every content page inherits from this unless explicitly overridden.
+# Reads design tokens from design.md via the `design` global.
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>{{ title }} — Everest Research</title>
+<meta name="description" content="{{ description or (dek | default('Everest Capital research and content.')) }}">
+{% if og_image %}<meta property="og:image" content="{{ og_image }}">{% endif %}
+<meta property="og:title" content="{{ title }}">
+<meta property="og:description" content="{{ description or dek }}">
+<meta property="og:type" content="article">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    /* Injected from design.md — do NOT hand-edit these values */
+    --navy:         {{ design.colors.primary.navy }};
+    --navy-light:   {{ design.colors.primary.navy_light }};
+    --orange:       {{ design.colors.accent.orange }};
+    --orange-bright:{{ design.colors.accent.orange_bright }};
+    --bg:           {{ design.colors.background.base }};
+    --bg-raised:    {{ design.colors.background.raised }};
+    --bg-card:      {{ design.colors.background.card }};
+    --border:       {{ design.colors.border.default }};
+    --text:         {{ design.colors.text.primary }};
+    --text-dim:     {{ design.colors.text.dim }};
+    --text-faint:   {{ design.colors.text.faint }};
+    --green:        {{ design.colors.semantic.green }};
+    --red:          {{ design.colors.semantic.red }};
+    --yellow:       {{ design.colors.semantic.yellow }};
+    --blue:         {{ design.colors.semantic.blue }};
+    --purple:       {{ design.colors.semantic.purple }};
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    {{ design.backgrounds.default_gradient | safe }}
+  }
+  .container { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+  .wide { max-width: 1100px; }
+
+  header.site {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+    background: rgba(2,6,23,0.85);
+    backdrop-filter: blur(12px);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
+  .brand {
+    display: flex; align-items: center; gap: 12px;
+    font-weight: 800; font-size: 18px; letter-spacing: -0.02em;
+    color: var(--text); text-decoration: none;
+  }
+  .brand-mark {
+    width: 32px; height: 32px;
+    background: {{ design.backgrounds.brand_stripe }};
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 800; font-size: 14px;
+  }
+  .brand-meta { color: var(--text-faint); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; }
+  nav.top { display: flex; gap: 28px; font-size: 14px; font-weight: 500; }
+  nav.top a { color: var(--text-dim); text-decoration: none; transition: color 150ms; }
+  nav.top a:hover { color: var(--orange); }
+
+  article { padding: 60px 0 80px; }
+  h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.08; margin-bottom: 20px; }
+  .dek { font-size: 19px; color: var(--text-dim); margin-bottom: 32px; line-height: 1.5; }
+
+  h2 {
+    font-size: 13px; font-weight: 600;
+    color: var(--orange);
+    text-transform: uppercase; letter-spacing: 0.18em;
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 56px; margin-bottom: 20px;
+    padding-bottom: 8px; border-bottom: 1px dashed var(--border);
+  }
+  h3 { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; margin-top: 36px; margin-bottom: 14px; color: var(--text); }
+  p { margin-bottom: 18px; color: var(--text-dim); font-size: 16px; }
+  p strong, li strong { color: var(--text); font-weight: 600; }
+  a { color: var(--orange); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88em;
+    background: var(--bg-card);
+    padding: 2px 6px; border-radius: 3px;
+    color: var(--orange); border: 1px solid var(--border);
+  }
+  pre { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 18px 22px; margin: 20px 0 28px; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text); line-height: 1.6; }
+  pre code { background: transparent; border: none; padding: 0; color: var(--text); }
+  ul, ol { margin: 16px 0 24px 20px; color: var(--text-dim); }
+  li { margin-bottom: 10px; }
+
+  table { width: 100%; border-collapse: collapse; margin: 20px 0 32px; font-size: 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  th { text-align: left; padding: 14px 18px; background: var(--bg-raised); font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--orange); text-transform: uppercase; letter-spacing: 0.1em; border-bottom: 1px solid var(--border); }
+  td { padding: 14px 18px; border-bottom: 1px solid var(--border); color: var(--text-dim); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  td:first-child { color: var(--text); font-weight: 500; }
+
+  blockquote { border-left: 3px solid var(--orange); padding: 12px 20px; margin: 24px 0; background: var(--bg-card); border-radius: 0 6px 6px 0; color: var(--text-dim); font-style: italic; }
+
+  .post-meta {
+    display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+    margin-bottom: 24px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .badge { padding: 4px 10px; border-radius: 4px; font-weight: 600; }
+  .badge-transcript { background: rgba(59,130,246,0.15); color: var(--blue); border: 1px solid rgba(59,130,246,0.4); }
+  .badge-repo { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.4); }
+  .badge-adopt { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.4); }
+  .badge-confirm { background: rgba(245,158,11,0.15); color: var(--orange); border: 1px solid rgba(245,158,11,0.4); }
+  .badge-score { background: rgba(168,85,247,0.15); color: var(--purple); border: 1px solid rgba(168,85,247,0.4); }
+
+  footer.site { padding: 48px 0; border-top: 1px solid var(--border); color: var(--text-faint); font-size: 12px; text-align: center; }
+  footer.site code { font-family: 'JetBrains Mono', monospace; color: var(--text-dim); }
+
+  @media print {
+    header.site, footer.site, nav.top { display: none; }
+    body { background: white; color: black; }
+    h1, h2, h3, p, li, td { color: black !important; }
+    a { color: #1E3A5F; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="header-inner">
+    <a class="brand" href="/">
+      <div class="brand-mark">E</div>
+      <div>Everest Research<div class="brand-meta">Content Engine</div></div>
+    </a>
+    <nav class="top">
+      <a href="/research/">Research</a>
+      <a href="/reports/">Reports</a>
+      <a href="/design.md">Design</a>
+    </nav>
+  </div>
+</header>
+
+<article>
+  <div class="container">
+
+    {% if type or verdict %}
+    <div class="post-meta">
+      {% if type %}<span class="badge badge-{{ type }}">{{ type }}</span>{% endif %}
+      {% if verdict %}<span class="badge badge-{{ verdict_class or 'adopt' }}">{{ verdict }}</span>{% endif %}
+      {% if repoeval_score %}<span class="badge badge-score">REPOEVAL {{ repoeval_score }}</span>{% endif %}
+      {% if date %}<span>{{ date | isoDate }}</span>{% endif %}
+    </div>
+    {% endif %}
+
+    <h1>{{ title }}</h1>
+    {% if dek %}<p class="dek">{{ dek }}</p>{% endif %}
+
+    {{ content | safe }}
+
+  </div>
+</article>
+
+<footer class="site">
+  <div class="container">
+    Everest Capital USA · <code>breverdbidder/everest-content</code> · Rendered by Eleventy
+  </div>
+</footer>
+
+</body>
+</html>
