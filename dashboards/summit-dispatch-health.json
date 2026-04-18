@@ -1,0 +1,133 @@
+{
+  "title": "SUMMIT Dispatch Health + Honesty Violations",
+  "uid": "summit-dispatch-health",
+  "tags": ["summit", "honesty", "everest"],
+  "timezone": "America/New_York",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "5m",
+  "time": {
+    "from": "now-30d",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Honesty Violations (summit_dispatch) — daily trend",
+      "type": "timeseries",
+      "datasource": { "type": "postgres", "uid": "${DS_SUPABASE}" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "drawStyle": "bars", "fillOpacity": 70, "stacking": { "mode": "normal" } },
+          "color": { "mode": "palette-classic" }
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawSql": "SELECT day AS time, severity, sum(n) AS value FROM public.v_honesty_violations_summit_daily WHERE $__timeFilter(day) GROUP BY day, severity ORDER BY day"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "SUMMITs by state (last 30d)",
+      "type": "stat",
+      "datasource": { "type": "postgres", "uid": "${DS_SUPABASE}" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" } } },
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "graphMode": "area" },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT state, sum(n) AS value FROM public.v_summit_health GROUP BY state ORDER BY sum(n) DESC"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "EG14 pass rate over time",
+      "type": "timeseries",
+      "datasource": { "type": "postgres", "uid": "${DS_SUPABASE}" },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 8 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "custom": { "drawStyle": "line", "lineWidth": 2, "fillOpacity": 10 }
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawSql": "SELECT day AS time, CASE WHEN sum(n) = 0 THEN NULL ELSE sum(eg14_passed)::float / sum(n) END AS \"eg14_pass_rate\" FROM public.v_summit_health WHERE state IN ('verified','closed') AND $__timeFilter(day) GROUP BY day ORDER BY day"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Ghost-success blocked events (24h)",
+      "type": "table",
+      "datasource": { "type": "postgres", "uid": "${DS_SUPABASE}" },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 16 },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "rawSql": "SELECT created_at AS \"when\", severity, tag_used, substring(claim, 1, 120) AS claim, substring(actual_truth, 1, 100) AS truth, session_source FROM public.honesty_violations WHERE domain = 'summit_dispatch' AND created_at > now() - interval '24 hours' ORDER BY created_at DESC LIMIT 50"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "SUMMITs median duration (min) by priority",
+      "type": "timeseries",
+      "datasource": { "type": "postgres", "uid": "${DS_SUPABASE}" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 24 },
+      "fieldConfig": { "defaults": { "unit": "m" } },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawSql": "SELECT day AS time, priority AS metric, median_minutes AS value FROM public.v_summit_health WHERE $__timeFilter(day) ORDER BY day"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Delivery proof coverage (% SUMMITs with evidence)",
+      "type": "stat",
+      "datasource": { "type": "postgres", "uid": "${DS_SUPABASE}" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 24 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "thresholds": { "steps": [
+            { "color": "red",    "value": null },
+            { "color": "orange", "value": 0.7 },
+            { "color": "green",  "value": 0.9 }
+          ]}
+        }
+      },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT CASE WHEN sum(n)=0 THEN NULL ELSE sum(has_proof)::float / sum(n) END AS value FROM public.v_summit_health WHERE day > now() - interval '7 days' AND state IN ('verified','closed')"
+        }
+      ]
+    }
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "DS_SUPABASE",
+        "type": "datasource",
+        "query": "postgres",
+        "label": "Supabase Postgres"
+      }
+    ]
+  }
+}
