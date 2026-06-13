@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Orbital TitleRegister — 88-Field Schema</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"><style>
+:root{--bg:#020617;--navy:#1E3A5F;--navy-soft:rgba(30,58,95,.35);--navy-line:rgba(30,58,95,.85);--orange:#F59E0B;--orange-dim:rgba(245,158,11,.14);--text:#E2E8F0;--text-dim:#94A3B8;--text-faint:#64748B;--card:#0A1428;--chip:#0F1D36;--green:#34D399}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px 80px}.mono{font-family:'JetBrains Mono',monospace}
+header{padding:48px 0 32px;border-bottom:1px solid var(--navy-line)}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);margin-bottom:14px;font-weight:500}
+h1{font-size:clamp(26px,5vw,40px);font-weight:800;letter-spacing:-.02em;line-height:1.1}h1 .accent{color:var(--orange)}
+.subline{margin-top:12px;color:var(--text-dim);font-size:15px;max-width:640px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.badge{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;padding:5px 10px;border-radius:4px;background:var(--navy-soft);border:1px solid var(--navy-line);color:var(--text-dim)}
+.badge.verified{background:rgba(52,211,153,.08);border-color:rgba(52,211,153,.35);color:var(--green)}
+.totals{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:1px;background:var(--navy-line);border:1px solid var(--navy-line);border-radius:8px;overflow:hidden;margin:28px 0 8px}
+.total-cell{background:var(--card);padding:14px 12px;text-align:center}
+.total-cell .num{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;color:var(--text)}
+.total-cell .lbl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint);margin-top:3px}
+.total-cell.sum{background:var(--navy)}.total-cell.sum .num{color:var(--orange)}.total-cell.sum .lbl{color:#BFD3EA}
+.distbar{display:flex;height:10px;border-radius:5px;overflow:hidden;margin:14px 0 36px;border:1px solid var(--navy-line)}.distbar span{display:block;height:100%}
+.legend{display:flex;gap:16px;margin:0 0 28px;font-size:11px;color:var(--text-faint);flex-wrap:wrap}.legend .key{display:flex;align-items:center;gap:6px}.legend .swatch{font-family:'JetBrains Mono',monospace;color:var(--orange)}
+.group{background:var(--card);border:1px solid var(--navy-line);border-radius:10px;margin-bottom:18px;overflow:hidden}
+.group-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;padding:16px 20px 12px;border-bottom:1px solid var(--navy-soft)}
+.gnum{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--orange);min-width:20px}
+.gname{font-size:16px;font-weight:700;letter-spacing:-.01em;flex:1}
+.gname .mltag{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;color:var(--orange);background:var(--orange-dim);border:1px solid rgba(245,158,11,.3);border-radius:3px;padding:2px 6px;margin-left:8px;vertical-align:middle;letter-spacing:.05em}
+.gcount{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-faint)}.gcount b{color:var(--text);font-weight:600}
+.fields{display:flex;flex-wrap:wrap;gap:7px;padding:14px 20px 18px}
+.field{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dim);background:var(--chip);border:1px solid var(--navy-soft);border-radius:4px;padding:4px 9px;transition:border-color .15s,color .15s}
+.field:hover{border-color:var(--orange);color:var(--text)}
+.field.count::after{content:"#";color:var(--orange);margin-left:4px;font-size:10px;opacity:.7}
+.sources{margin-top:36px;padding:20px;background:var(--navy-soft);border:1px solid var(--navy-line);border-radius:10px}
+.sources h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-faint);margin-bottom:12px;font-weight:600}
+.srcrow{display:flex;flex-wrap:wrap;gap:8px}.src{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);background:var(--card);border:1px solid var(--navy-line);border-radius:5px;padding:6px 12px}
+footer{margin-top:40px;color:var(--text-faint);font-size:12px;font-family:'JetBrains Mono',monospace;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}footer .check{color:var(--green)}
+@media(max-width:560px){header{padding:36px 0 24px}.group-head,.fields{padding-left:14px;padding-right:14px}}
+</style></head><body><div class="wrap"><header><div class="eyebrow">CI Dossier · API Surface Decode · Orbital Witness</div><h1>Orbital <span class="accent">TitleRegister</span><br>88 Fields · 9 Groups</h1><p class="subline">Full GraphQL type decode of Orbital's core title register object — the data backbone behind their UK title due-diligence product.</p><div class="badges"><span class="badge verified">VERIFIED · GraphQL introspection</span><span class="badge">HMLR</span><span class="badge">Companies House</span><span class="badge">CCOD / OCOD</span><span class="badge">Registered Leases</span></div></header><div class="totals" id="totals"></div><div class="distbar" id="distbar" aria-label="Field distribution by group"></div><div class="legend"><div class="key"><span class="swatch">#</span> count / aggregate field</div><div class="key"><span class="swatch">[ML]</span> machine-learning enriched group</div></div><div id="groups"></div><div class="sources"><h2>Source Pipelines</h2><div class="srcrow"><span class="src">HMLR · register data</span><span class="src">Companies House · corporate proprietors</span><span class="src">CCOD / OCOD · UK + overseas company ownership</span><span class="src">Registered Leases dataset</span></div></div><footer><span>16+7+9+14+28+3+8+2+1 = 88 <span class="check">✓</span></span><span>VERIFIED · GraphQL introspection · Jun 2026</span></footer></div><script>
+const G=[
+{n:"Identity & Provenance",ml:0,c:"#3B6491",f:["id","titleNumber","organizationId","editionDate","searchedFrom","downloadDate","issuedOnDate","addedOnDate","processedTimestamp","productResponseCode","parentTitleNumber","uprns","createdBy","createdOn","updatedBy","updatedOn"]},
+{n:"Tenure, Quality & Complexity",ml:1,c:"#2E5180",f:["genericEntries","complexity","tenure","tenureType","qualityOfTenure","registerEntryIndicators","titleComplexityRegisterIndicators"]},
+{n:"Proprietorship & Ownership",ml:0,c:"#4A77A8",f:["currentProprietorshipDate","deathOfProprietorCount#","ccodOcodTitle","companiesHouseData","lastUpdatedCompaniesHouseDateTime","ccodOcodOwners","deathOfProprietors","proprietorshipParties","proprietorEntry"]},
+{n:"Financial: Charges & Price",ml:0,c:"#F59E0B",f:["chargeCount#","rentChargeCount#","vendorsLienCount#","discountChargeCount#","equitableChargeCount#","notedChargeCount#","pricePaid","bankChargeHolders","discountCharges","equitableCharges","notedCharges","rentCharges","vendorsLiens","charges"]},
+{n:"Encumbrances & Notices",ml:0,c:"#1E3A5F",f:["restrictionDetailsCount#","agreedNoticeCount#","cautionCount#","deedOfPostponementCount#","greenOutEntryCount#","rightOfPreEmptionCount#","documentDetailsCount#","unilateralNoticeDetailsCount#","creditorsNoticeCount#","unidentifiedEntryCount#","cCBIEntryCount#","scheduleOfNoticesOfLeaseVersion","scheduleOfNoticesOfLeaseCount#","covenantCount#","agreedNotices","cautions","ccbiEntries","creditorsNotices","deedOfPostponements","documentDetails","greenOutEntries","restrictionDetails","restrictiveCovenants","rightOfPreEmptions","scheduleOfNoticesOfLease","unidentifiedEntries","unilateralNotices","covenants"]},
+{n:"Leases",ml:0,c:"#6B94BF",f:["leaseCount#","lease","registeredLeasesData"]},
+{n:"Rights, Easements & Spatial",ml:0,c:"#8FB2D6",f:["propertyAddressCount#","homeRightsCount#","rightsBenefittingCount#","rightsBurdeningCount#","propertyAddress","rightsBenefitting","rightsBurdening","unregLandIntersection"]},
+{n:"Risk Flags",ml:0,c:"#DC6B4A",f:["bankruptcyCount#","bankruptcies"]},
+{n:"ML Tags",ml:0,c:"#FCD34D",f:["titleRegisterMlTags"]}
+];
+const lbl=["Identity","Tenure","Owners","Financial","Encumbr.","Leases","Rights","Risk","ML"];
+const tot=G.reduce((s,g)=>s+g.f.length,0);
+let th="";G.forEach((g,i)=>{th+=`<div class="total-cell"><div class="num">${g.f.length}</div><div class="lbl">${lbl[i]}</div></div>`;});
+th+=`<div class="total-cell sum"><div class="num">${tot}</div><div class="lbl">Total ✓</div></div>`;
+document.getElementById('totals').innerHTML=th;
+document.getElementById('distbar').innerHTML=G.map(g=>`<span style="width:${(g.f.length/tot*100).toFixed(1)}%;background:${g.c}" title="${g.n} ${g.f.length}"></span>`).join('');
+document.getElementById('groups').innerHTML=G.map((g,i)=>{
+const chips=g.f.map(x=>{const cnt=x.endsWith('#');const name=cnt?x.slice(0,-1):x;return `<span class="field${cnt?' count':''}">${name}</span>`;}).join('');
+const ml=g.ml?'<span class="mltag">ML</span>':'';
+const extra=i===4?' · largest group':'';
+return `<section class="group"><div class="group-head"><span class="gnum">${String(i+1).padStart(2,'0')}</span><span class="gname">${g.n}${ml}</span><span class="gcount"><b>${g.f.length}</b> fields${extra}</span></div><div class="fields">${chips}</div></section>`;
+}).join('');
+</script></body></html>
